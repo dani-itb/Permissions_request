@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,8 @@ import com.example.permissionsrequest.utils.PermissionStatus
 import com.example.permissionsrequest.viewmodels.PermissionViewModel
 
 @Composable
-fun PermissionsScreen(activity: ComponentActivity){
+fun PermissionsScreen(){
+    val activity = LocalActivity.current
     val viewModel = viewModel<PermissionViewModel>()
 
     val permissions = listOf(
@@ -50,7 +51,7 @@ fun PermissionsScreen(activity: ComponentActivity){
             val granted = result[permission] ?: false
             val status = when {
                 granted -> PermissionStatus.Granted
-                ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) -> PermissionStatus.Denied
+                ActivityCompat.shouldShowRequestPermissionRationale(activity!!, permission) -> PermissionStatus.Denied
                 else -> PermissionStatus.PermanentlyDenied
             }
             viewModel.updatePermissionStatus(permission, status)
@@ -100,9 +101,9 @@ fun PermissionsScreen(activity: ComponentActivity){
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
+                    data = Uri.fromParts("package", activity!!.packageName, null)
                 }
-                activity.startActivity(intent)
+                activity!!.startActivity(intent)
             }) {
                 Text("Go to settings")
             }
