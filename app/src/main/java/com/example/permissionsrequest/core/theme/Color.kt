@@ -1,4 +1,4 @@
-package com.example.permissionsrequest.ui.theme
+package com.example.permissionsrequest.core.theme
 
 import androidx.compose.ui.graphics.Color
 
